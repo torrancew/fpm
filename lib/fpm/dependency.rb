@@ -48,7 +48,7 @@ class FPM::Dependency
   end # def version
 
   # Get the Dependency Constraint as a String
-  def constraint
+  def operator
     case @constraint
     when :gt
       '>'
@@ -68,12 +68,12 @@ class FPM::Dependency
   end # def constraint
 
   def to_s
-    return "#{name} #{constraint} #{version}"
+    return "#{name} #{operator} #{version}"
   end # def to_s
 
   private
 
-  def initialize(pkg, constraint=:gt, version=0)
+  def initialize(pkg, version=0, constraint=:ge)
     unless self.class.constraints.include?(constraint)
       raise UnknownConstraint, "Unknown constraint: #{@constraint.inspect}"
     end
