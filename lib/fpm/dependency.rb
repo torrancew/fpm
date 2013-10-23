@@ -31,8 +31,15 @@ class FPM::Dependency
 
     # List supported constraints
     def constraints
-      [:gt, :ge, :lt, :le, :eq, :ne]
-    end
+      return {
+        :gt => '>',
+        :lt => '<',
+        :eq => '=',
+        :ge => '>=',
+        :le => '<=',
+        :ne => '!=',
+      }
+    end # def constraints
   end # class << self
 
   # Get the Dependency Name
@@ -47,25 +54,18 @@ class FPM::Dependency
     return nil
   end # def version
 
+  def constraints
+    return self.class.constraints
+  end # def constraints
+
   # Get the Dependency Constraint as a String
   def operator
-    case @constraint
-    when :gt
-      '>'
-    when :ge
-      '>='
-    when :lt
-      '<'
-    when :le
-      '<='
-    when :eq
-      '='
-    when :ne
-      '!='
-    else
+    unless constraints.keys.include?(@constraint)
       raise UnknownConstraint, "Unknown constraint: #{@constraint.inspect}"
     end
-  end # def constraint
+    
+    return constraints[@constraint]
+  end # def operator
 
   def to_s
     return "#{name} #{operator} #{version}"

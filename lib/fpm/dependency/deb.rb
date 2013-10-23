@@ -1,19 +1,12 @@
 require 'fpm/dependency'
 
 class FPM::Dependency::Deb < FPM::Dependency
-  def operator
-    case @constraint
-    when :gt
-      '>>'
-    when :lt
-      '<<'
-    else
-      super
-    end # case @constraint
-  end # def constraint
+  def self.constraints
+    return super.merge(:gt => '>>', :lt => '<<')
+  end # def self.constraints
 
   def to_s
-    "#{name} (#{operator} #{version})"
+    return "#{name} (#{operator} #{version})"
   end # def to_s
 end # class FPM::Dependency::Deb
 
